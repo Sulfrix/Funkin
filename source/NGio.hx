@@ -184,8 +184,9 @@ class NGio
 
 	inline static public function logEvent(event:String)
 	{
-		NG.core.calls.event.logEvent(event).send();
+		//NG.core.calls.event.logEvent(event).send();
 		trace('should have logged: ' + event);
+		trace("THIS IS THE CODE THAT FUCKS SHIT UP BRO");
 	}
 
 	inline static public function unlockMedal(id:Int)
