@@ -28,6 +28,9 @@ class FreeplayState extends MusicBeatState
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
 
+	var modifierMenuOpen:Bool = false;
+	var backTimer:Int = 0;
+
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
 
@@ -210,7 +213,13 @@ class FreeplayState extends MusicBeatState
 		if (controls.RIGHT_P)
 			changeDiff(1);
 
-		if (controls.BACK)
+		if (controls.RESET)
+		{
+			super.openSubState(new ModifierSubState(20, 20));
+			modifierMenuOpen = true;
+		}
+
+		if (controls.BACK && backTimer <= 0 && !modifierMenuOpen)
 		{
 			FlxG.switchState(new MainMenuState());
 		}
@@ -229,6 +238,14 @@ class FreeplayState extends MusicBeatState
 			trace('CUR WEEK' + PlayState.storyWeek);
 			LoadingState.loadAndSwitchState(new PlayState());
 		}
+	}
+
+	public override function closeSubState()
+	{
+		modifierMenuOpen = false;
+		backTimer = 5;
+		// trace("Custom closeSubState called!");
+		super.closeSubState();
 	}
 
 	function changeDiff(change:Int = 0)
@@ -258,7 +275,7 @@ class FreeplayState extends MusicBeatState
 	function changeSelection(change:Int = 0)
 	{
 		#if !switch
-		NGio.logEvent('Fresh');
+		// NGio.logEvent('Fresh');
 		#end
 
 		// NGio.logEvent('Fresh');

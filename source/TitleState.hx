@@ -290,6 +290,11 @@ class TitleState extends MusicBeatState
 
 				if (version.trim() != NGio.GAME_VER_NUMS.trim() && !OutdatedSubState.leftState)
 				{
+					#if debug
+					if (NGio.GAME_VER_NUMS.trim() == "") {
+						FlxG.switchState(new MainMenuState());
+					}
+					#end
 					FlxG.switchState(new OutdatedSubState());
 					trace('OLD VERSION!');
 					trace('old ver');

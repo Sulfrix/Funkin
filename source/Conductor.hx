@@ -14,6 +14,7 @@ typedef BPMChangeEvent =
 	var bpm:Int;
 }
 
+
 class Conductor
 {
 	public static var bpm:Int = 100;
@@ -22,6 +23,56 @@ class Conductor
 	public static var songPosition:Float;
 	public static var lastSongPos:Float;
 	public static var offset:Float = 0;
+	public static var modifiers:Array<Modifier> = [
+		new Modifier({
+			prettyName: "Fade Out",
+			name: "fadeout",
+			scoreMult: 1.3,
+			enabled: false,
+			desc: "Notes fade out after they appear",
+			nonCompat: ["fadein", "invisible"],
+		}),
+		new Modifier({
+			prettyName: "Fade In",
+			name: "fadein",
+			scoreMult: 1.1,
+			enabled: false,
+			desc: "Notes are invisible until right before they need to be hit",
+			nonCompat: ["fadeout", "invisible"],
+		}),
+		new Modifier({
+			prettyName: "Invisible",
+			name: "invisible",
+			scoreMult: 3,
+			enabled: false,
+			desc: "Notes are invisible. Why?",
+			nonCompat: ["fadeout", "fadein"],
+		}),
+		new Modifier({
+			prettyName: "Full Modifiers",
+			name: "enemy",
+			scoreMult: 1,
+			enabled: false,
+			desc: "Certain modifiers will also effect the other player's notes",
+			nonCompat: []
+		}),
+		new Modifier({
+			prettyName: "No Fail",
+			name: "nofail",
+			scoreMult: 0.4,
+			enabled: false,
+			desc: "Health is locked to 50%",
+			nonCompat: []
+		}),
+		new Modifier({
+			prettyName: "No Miss Stun",
+			name: "nooverstrum",
+			scoreMult: 0.2,
+			enabled: false,
+			desc: "Disables miss stun",
+			nonCompat: []
+		})
+	];
 
 	public static var safeFrames:Int = 10;
 	public static var safeZoneOffset:Float = (safeFrames / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
@@ -30,6 +81,16 @@ class Conductor
 
 	public function new()
 	{
+	}
+
+	public static function getModifierByName(name:String):Modifier {
+		var out:Modifier;
+		for (mod in modifiers) {
+			if (mod.name.toLowerCase() == name.toLowerCase()) {
+				return mod;
+			}
+		}
+		return null;
 	}
 
 	public static function mapBPMChanges(song:SwagSong)

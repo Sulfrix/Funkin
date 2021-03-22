@@ -1026,6 +1026,7 @@ class PlayState extends MusicBeatState
 				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.scrollFactor.set(0, 0);
+				//add(swagNote.debugText);
 
 				var susLength:Float = swagNote.sustainLength;
 
@@ -1080,6 +1081,7 @@ class PlayState extends MusicBeatState
 		{
 			// FlxG.log.add(i);
 			var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
+			
 
 			switch (curStage)
 			{
@@ -1353,6 +1355,9 @@ class PlayState extends MusicBeatState
 		if (health > 2)
 			health = 2;
 
+		if (Conductor.getModifierByName("nofail").enabled)
+			health = 1;
+
 		if (healthBar.percent < 20)
 			iconP1.animation.curAnim.curFrame = 1;
 		else
@@ -1606,7 +1611,8 @@ class PlayState extends MusicBeatState
 
 					if (SONG.needsVoices)
 						vocals.volume = 1;
-
+					//daNote.debugText.kill();
+					//daNote.debugText.destroy();
 					daNote.kill();
 					notes.remove(daNote, true);
 					daNote.destroy();
@@ -2119,15 +2125,16 @@ class PlayState extends MusicBeatState
 		var rightP = controls.RIGHT_P;
 		var downP = controls.DOWN_P;
 		var leftP = controls.LEFT_P;
-
-		if (leftP)
-			noteMiss(0);
-		if (downP)
-			noteMiss(1);
-		if (upP)
-			noteMiss(2);
-		if (rightP)
-			noteMiss(3);
+		if (!Conductor.getModifierByName("nooverstrum").enabled) {
+			if (leftP)
+				noteMiss(0);
+			if (downP)
+				noteMiss(1);
+			if (upP)
+				noteMiss(2);
+			if (rightP)
+				noteMiss(3);
+		}
 	}
 
 	function noteCheck(keyP:Bool, note:Note):Void

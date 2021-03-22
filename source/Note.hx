@@ -1,5 +1,6 @@
 package;
 
+import flixel.text.FlxText;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
@@ -20,6 +21,7 @@ class Note extends FlxSprite
 	public var tooLate:Bool = false;
 	public var wasGoodHit:Bool = false;
 	public var prevNote:Note;
+	//public var debugText:FlxText;
 
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
@@ -100,6 +102,9 @@ class Note extends FlxSprite
 				setGraphicSize(Std.int(width * 0.7));
 				updateHitbox();
 				antialiasing = true;
+				//debugText = new FlxText(0, 0, 0, "", 20);
+				//debugText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
+				//debugText.scrollFactor.set(0, 0);
 		}
 
 		switch (noteData)
@@ -170,7 +175,9 @@ class Note extends FlxSprite
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
+		//debugText.text = Std.string(strumTime - Conductor.songPosition);
+		//debugText.x = x;
+		//debugText.y = y;
 		if (mustPress)
 		{
 			// The * 0.5 is so that it's easier to hit them too late, instead of too early
@@ -195,6 +202,35 @@ class Note extends FlxSprite
 		{
 			if (alpha > 0.3)
 				alpha = 0.3;
+		}
+		if (mustPress || Conductor.getModifierByName("enemy").enabled) {
+			var msFade;
+			var msPadding;
+			// Fade out modifier
+			if (Conductor.getModifierByName("fadeout").enabled) {
+				msFade = 300;
+				msPadding = 300;
+				if (strumTime - Conductor.songPosition < msFade+msPadding) {
+					var time = strumTime - Conductor.songPosition;
+					if (time < 0) time = 0;
+					time = time-msPadding;
+					alpha = time / msFade;
+				}
+			}
+			if (Conductor.getModifierByName("fadein").enabled) {
+				msFade = 100;
+				msPadding = 300;
+				if (strumTime - Conductor.songPosition < msFade+msPadding) {
+					var time = strumTime - Conductor.songPosition;
+					time = time - msPadding;
+					alpha = 1 - (time / msFade);
+				} else {
+					alpha = 0;
+				}
+			}
+			if (Conductor.getModifierByName("invisible").enabled) {
+				alpha = 0;
+			}
 		}
 	}
 }

@@ -21,6 +21,8 @@ using StringTools;
 class StoryMenuState extends MusicBeatState
 {
 	var scoreText:FlxText;
+	var modifierMenuOpen:Bool = false;
+	var backTimer:Int = 0;
 
 	var weekData:Array<Dynamic> = [
 		['Tutorial'],
@@ -112,7 +114,7 @@ class StoryMenuState extends MusicBeatState
 		add(grpLocks);
 
 		trace("Line 70");
-		
+
 		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -224,6 +226,10 @@ class StoryMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+
+		if (backTimer > 0) {
+			backTimer = backTimer - 1;
+		}
 		// scoreText.setFormat('VCR OSD Mono', 32);
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.5));
 
@@ -240,44 +246,52 @@ class StoryMenuState extends MusicBeatState
 		{
 			lock.y = grpWeekText.members[lock.ID].y;
 		});
-
-		if (!movedBack)
+		if (!modifierMenuOpen)
 		{
-			if (!selectedWeek)
+			if (!movedBack)
 			{
-				if (controls.UP_P)
+				if (!selectedWeek)
 				{
-					changeWeek(-1);
+					if (controls.UP_P)
+					{
+						changeWeek(-1);
+					}
+
+					if (controls.DOWN_P)
+					{
+						changeWeek(1);
+					}
+
+					if (controls.RIGHT)
+						rightArrow.animation.play('press')
+					else
+						rightArrow.animation.play('idle');
+
+					if (controls.LEFT)
+						leftArrow.animation.play('press');
+					else
+						leftArrow.animation.play('idle');
+
+					if (controls.RIGHT_P)
+						changeDifficulty(1);
+					if (controls.LEFT_P)
+						changeDifficulty(-1);
 				}
 
-				if (controls.DOWN_P)
+				if (controls.ACCEPT)
 				{
-					changeWeek(1);
+					selectWeek();
 				}
 
-				if (controls.RIGHT)
-					rightArrow.animation.play('press')
-				else
-					rightArrow.animation.play('idle');
-
-				if (controls.LEFT)
-					leftArrow.animation.play('press');
-				else
-					leftArrow.animation.play('idle');
-
-				if (controls.RIGHT_P)
-					changeDifficulty(1);
-				if (controls.LEFT_P)
-					changeDifficulty(-1);
-			}
-
-			if (controls.ACCEPT)
-			{
-				selectWeek();
+				if (controls.RESET)
+				{
+					super.openSubState(new ModifierSubState(20, 20));
+					modifierMenuOpen = true;
+				}
 			}
 		}
 
-		if (controls.BACK && !movedBack && !selectedWeek)
+		if (controls.BACK && !movedBack && !selectedWeek && backTimer <= 0 && !modifierMenuOpen)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			movedBack = true;
@@ -285,6 +299,13 @@ class StoryMenuState extends MusicBeatState
 		}
 
 		super.update(elapsed);
+	}
+
+	public override function closeSubState() {
+		modifierMenuOpen = false;
+		backTimer = 5;
+		//trace("Custom closeSubState called!");
+		super.closeSubState();
 	}
 
 	var movedBack:Bool = false;
