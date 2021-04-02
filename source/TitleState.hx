@@ -24,7 +24,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import io.newgrounds.NG;
+//import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
 
@@ -114,8 +114,8 @@ class TitleState extends MusicBeatState
 
 			FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 1, new FlxPoint(0, -1), {asset: diamond, width: 32, height: 32},
 				new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
-			FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.7, new FlxPoint(0, 1),
-				{asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+			//FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.7, new FlxPoint(0, 1),
+			//	{asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
 
 			transIn = FlxTransitionableState.defaultTransIn;
 			transOut = FlxTransitionableState.defaultTransOut;
@@ -290,7 +290,7 @@ class TitleState extends MusicBeatState
 
 				if (version.trim() != NGio.GAME_VER_NUMS.trim() && !OutdatedSubState.leftState)
 				{
-					FlxG.switchState(new OutdatedSubState());
+					//FlxG.switchState(new OutdatedSubState());
 					trace('OLD VERSION!');
 					trace('old ver');
 					trace(version.trim());
@@ -299,8 +299,8 @@ class TitleState extends MusicBeatState
 				}
 				else
 				{
-					FlxG.switchState(new MainMenuState());
 				}
+				FlxG.switchState(new MainMenuState());
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}

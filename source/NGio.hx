@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.util.FlxSignal;
 import flixel.util.FlxTimer;
+#if !mobile
 import io.newgrounds.NG;
 import io.newgrounds.components.ScoreBoardComponent.Period;
 import io.newgrounds.objects.Medal;
@@ -11,6 +12,7 @@ import io.newgrounds.objects.ScoreBoard;
 import io.newgrounds.objects.events.Response;
 import io.newgrounds.objects.events.Result.GetCurrentVersionResult;
 import io.newgrounds.objects.events.Result.GetVersionResult;
+#end
 import lime.app.Application;
 import openfl.display.Stage;
 
@@ -21,6 +23,18 @@ using StringTools;
  */
 class NGio
 {
+	#if mobile
+	public static var GAME_VER:String = "";
+	public static var GAME_VER_NUMS:String = '';
+	public static var gotOnlineVer:Bool = false;
+
+	public static function noLogin(api:String)
+	{
+		trace("NGIO noLogin() called.");
+	}
+	#end
+
+	#if !mobile
 	public static var isLoggedIn:Bool = false;
 	public static var scoreboardsLoaded:Bool = false;
 
@@ -197,4 +211,22 @@ class NGio
 				medal.sendUnlock();
 		}
 	}
+	#end
+
+	#if mobile
+	inline static public function unlockMedal(id:Int)
+	{
+		trace("Medal unlocked: " + id);
+	}
+
+	inline static public function logEvent(event:String)
+	{
+		trace('should have logged: ' + event);
+	}
+
+	inline static public function postScore(score:Int = 0, song:String)
+	{
+		trace("sex event (ngio class)");
+	}
+	#end
 }
