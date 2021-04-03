@@ -54,7 +54,7 @@ class Conductor
 			scoreMult: 1,
 			enabled: false,
 			desc: "Certain modifiers will also effect the other player's notes",
-			nonCompat: []
+			nonCompat: ["solo"]
 		}),
 		new Modifier({
 			prettyName: "No Fail",
@@ -62,7 +62,7 @@ class Conductor
 			scoreMult: 0.4,
 			enabled: false,
 			desc: "Health is locked to 50%",
-			nonCompat: []
+			nonCompat: ["auto"]
 		}),
 		new Modifier({
 			prettyName: "No Miss Stun",
@@ -70,8 +70,32 @@ class Conductor
 			scoreMult: 0.2,
 			enabled: false,
 			desc: "Disables miss stun",
+			nonCompat: ["auto"]
+		}),
+		new Modifier({
+			prettyName: "Solo Mode",
+			name: "solo",
+			scoreMult: 1,
+			enabled: false,
+			desc: "You have to play the other player's notes too.",
+			nonCompat: ["enemy", "auto"]
+		}),
+		new Modifier({
+			prettyName: "Auto Mode",
+			name: "auto",
+			scoreMult: 0,
+			enabled: false,
+			desc: "Plays the song for you.",
+			nonCompat: ["nooverstrum", "nofail", "solo"]
+		}),
+		new Modifier({
+			prettyName: "Score Change Texts",
+			name: "scoreparts",
+			scoreMult: 1,
+			enabled: true,
+			desc: "Adds little texts when notes are scored",
 			nonCompat: []
-		})
+		}),
 	];
 
 	public static var safeFrames:Int = 10;

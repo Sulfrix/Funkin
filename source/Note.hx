@@ -20,6 +20,8 @@ class Note extends FlxSprite
 	public var canBeHit:Bool = false;
 	public var tooLate:Bool = false;
 	public var wasGoodHit:Bool = false;
+
+	public var isCloneNote:Bool = false;
 	public var prevNote:Note;
 	//public var debugText:FlxText;
 
@@ -38,6 +40,7 @@ class Note extends FlxSprite
 	{
 		super();
 
+		//mustPress = true;
 		if (prevNote == null)
 			prevNote = this;
 
@@ -178,6 +181,7 @@ class Note extends FlxSprite
 		//debugText.text = Std.string(strumTime - Conductor.songPosition);
 		//debugText.x = x;
 		//debugText.y = y;
+		//mustPress = true;
 		if (mustPress)
 		{
 			// The * 0.5 is so that it's easier to hit them too late, instead of too early
