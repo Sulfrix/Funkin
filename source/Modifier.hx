@@ -8,6 +8,7 @@ typedef ModOptions =
 	var nonCompat:Array<String>;
 	var enabled:Bool;
 	var desc:String;
+	var hidden:Bool;
 }
 
 class Modifier
@@ -18,6 +19,7 @@ class Modifier
 	public var nonCompat:Array<String>;
 	public var enabled:Bool;
 	public var desc:String;
+	public var hidden:Bool;
 
 	public function new(options:ModOptions)
 	{
@@ -27,6 +29,7 @@ class Modifier
 		nonCompat = options.nonCompat;
 		enabled = options.enabled;
 		desc = options.desc;
+		hidden = options.hidden;
 	}
 
 	public function getConflicts():Array<Modifier>

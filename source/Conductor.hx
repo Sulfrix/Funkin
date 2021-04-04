@@ -31,6 +31,7 @@ class Conductor
 			enabled: false,
 			desc: "Notes fade out after they appear",
 			nonCompat: ["fadein", "invisible"],
+			hidden: false
 		}),
 		new Modifier({
 			prettyName: "Fade In",
@@ -39,6 +40,7 @@ class Conductor
 			enabled: false,
 			desc: "Notes are invisible until right before they need to be hit",
 			nonCompat: ["fadeout", "invisible"],
+			hidden: false,
 		}),
 		new Modifier({
 			prettyName: "Invisible",
@@ -47,6 +49,7 @@ class Conductor
 			enabled: false,
 			desc: "Notes are invisible. Why?",
 			nonCompat: ["fadeout", "fadein"],
+			hidden: false,
 		}),
 		new Modifier({
 			prettyName: "Full Modifiers",
@@ -54,7 +57,8 @@ class Conductor
 			scoreMult: 1,
 			enabled: false,
 			desc: "Certain modifiers will also effect the other player's notes",
-			nonCompat: ["solo"]
+			nonCompat: ["solo"],
+			hidden: false,
 		}),
 		new Modifier({
 			prettyName: "No Fail",
@@ -62,7 +66,8 @@ class Conductor
 			scoreMult: 0.4,
 			enabled: false,
 			desc: "Health is locked to 50%",
-			nonCompat: ["auto"]
+			nonCompat: ["auto"],
+			hidden: false,
 		}),
 		new Modifier({
 			prettyName: "No Miss Stun",
@@ -70,7 +75,8 @@ class Conductor
 			scoreMult: 0.2,
 			enabled: false,
 			desc: "Disables miss stun",
-			nonCompat: ["auto"]
+			nonCompat: ["auto"],
+			hidden: false,
 		}),
 		new Modifier({
 			prettyName: "Solo Mode",
@@ -78,7 +84,8 @@ class Conductor
 			scoreMult: 1,
 			enabled: false,
 			desc: "You have to play the other player's notes too.",
-			nonCompat: ["enemy", "auto"]
+			nonCompat: ["enemy", "auto"],
+			hidden: false,
 		}),
 		new Modifier({
 			prettyName: "Auto Mode",
@@ -86,7 +93,8 @@ class Conductor
 			scoreMult: 0,
 			enabled: false,
 			desc: "Plays the song for you.",
-			nonCompat: ["nooverstrum", "nofail", "solo"]
+			nonCompat: ["nooverstrum", "nofail", "solo"],
+			hidden: true,
 		}),
 		new Modifier({
 			prettyName: "Score Change Texts",
@@ -94,7 +102,17 @@ class Conductor
 			scoreMult: 1,
 			enabled: true,
 			desc: "Adds little texts when notes are scored",
-			nonCompat: []
+			nonCompat: [],
+			hidden: false,
+		}),
+		new Modifier({
+			prettyName: "All Up Notes",
+			name: "upnotes",
+			scoreMult: 0,
+			enabled: false,
+			desc: "All notes are up notes.",
+			nonCompat: [],
+			hidden: false,
 		}),
 	];
 

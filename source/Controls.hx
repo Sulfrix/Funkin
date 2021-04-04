@@ -72,7 +72,7 @@ enum Control
 	UP;
 	LEFT;
 	RIGHT;
-	DOWN;
+	DOWN; 
 	RESET;
 	ACCEPT;
 	BACK;
@@ -87,6 +87,7 @@ enum KeyboardScheme
 	None;
 	DFJK;
 	Custom;
+	Replay;
 }
 
 /**
@@ -124,87 +125,87 @@ class Controls extends FlxActionSet
 
 	public var UP(get, never):Bool;
 
-	inline function get_UP()
+	function get_UP()
 		return _up.check();
 
 	public var LEFT(get, never):Bool;
 
-	inline function get_LEFT()
+	function get_LEFT()
 		return _left.check();
 
 	public var RIGHT(get, never):Bool;
 
-	inline function get_RIGHT()
+	function get_RIGHT()
 		return _right.check();
 
 	public var DOWN(get, never):Bool;
 
-	inline function get_DOWN()
+	function get_DOWN()
 		return _down.check();
 
 	public var UP_P(get, never):Bool;
 
-	inline function get_UP_P()
+	function get_UP_P()
 		return _upP.check();
 
 	public var LEFT_P(get, never):Bool;
 
-	inline function get_LEFT_P()
+	function get_LEFT_P()
 		return _leftP.check();
 
 	public var RIGHT_P(get, never):Bool;
 
-	inline function get_RIGHT_P()
+	function get_RIGHT_P()
 		return _rightP.check();
 
 	public var DOWN_P(get, never):Bool;
 
-	inline function get_DOWN_P()
+	function get_DOWN_P()
 		return _downP.check();
 
 	public var UP_R(get, never):Bool;
 
-	inline function get_UP_R()
+	function get_UP_R()
 		return _upR.check();
 
 	public var LEFT_R(get, never):Bool;
 
-	inline function get_LEFT_R()
+	function get_LEFT_R()
 		return _leftR.check();
 
 	public var RIGHT_R(get, never):Bool;
 
-	inline function get_RIGHT_R()
+	function get_RIGHT_R()
 		return _rightR.check();
 
 	public var DOWN_R(get, never):Bool;
 
-	inline function get_DOWN_R()
+	function get_DOWN_R()
 		return _downR.check();
 
 	public var ACCEPT(get, never):Bool;
 
-	inline function get_ACCEPT()
+	function get_ACCEPT()
 		return _accept.check();
 
 	public var BACK(get, never):Bool;
 
-	inline function get_BACK()
+	function get_BACK()
 		return _back.check();
 
 	public var PAUSE(get, never):Bool;
 
-	inline function get_PAUSE()
+	function get_PAUSE()
 		return _pause.check();
 
 	public var RESET(get, never):Bool;
 
-	inline function get_RESET()
+	function get_RESET()
 		return _reset.check();
 
 	public var CHEAT(get, never):Bool;
 
-	inline function get_CHEAT()
+	function get_CHEAT()
 		return _cheat.check();
 
 	#if (haxe >= "4.0.0")
@@ -534,8 +535,10 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
 				inline bindKeys(Control.RESET, [R]);
+				inline bindKeys(Control.CHEAT, [L]);
 			case None: // nothing
 			case Custom: // nothing
+			case Replay: // also nothing
 		}
 		#else
 		switch (scheme)
