@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
 import openfl.utils.Object;
@@ -67,8 +68,8 @@ typedef ReplayController =
 class ReplayPlayer extends PlayState
 {
 	public static var controller:ReplayController = {
-		UP: false, 
-    RIGHT: false,
+		UP: false,
+		RIGHT: false,
 		DOWN: false,
 		LEFT: false,
 		UP_P: false,
@@ -84,7 +85,9 @@ class ReplayPlayer extends PlayState
 
 	public var frameCounter:Int = 0;
 
-  public var replayText:FlxText;
+	public var replayText:FlxText;
+
+	public var playbackPaused:Bool = false;
 
 	override public function new(replay:Replay)
 	{
@@ -96,11 +99,12 @@ class ReplayPlayer extends PlayState
 	{
 		recording = false;
 		super.create();
-    replayText = new FlxText(5, 5, 0, "REPLAY", 60);
-    replayText.setFormat(Paths.font("vcr.ttf"), 60, FlxColor.WHITE);
-    replayText.alpha = 0.5;
-    replayText.cameras = [camHUD];
-    add(replayText);
+		replayText = new FlxText(5, 5, 0, "REPLAY", 60);
+		replayText.setFormat(Paths.font("vcr.ttf"), 60, FlxColor.WHITE);
+		replayText.alpha = 0.5;
+		replayText.cameras = [camHUD];
+		replayText.scrollFactor.set();
+		add(replayText);
 	}
 
 	public static function playback(replay:Replay)
@@ -114,20 +118,73 @@ class ReplayPlayer extends PlayState
 		LoadingState.loadAndSwitchState(new ReplayPlayer(replay));
 	}
 
-  public static function newFromReplay(replay:Replay):ReplayPlayer {
-    var poop:String = Highscore.formatSong(replay.songName.toLowerCase(), replay.difficulty);
+	public static function newFromReplay(replay:Replay):ReplayPlayer
+	{
+		var poop:String = Highscore.formatSong(replay.songName.toLowerCase(), replay.difficulty);
 		PlayState.SONG = Song.loadFromJson(poop, replay.songName.toLowerCase());
 		PlayState.isStoryMode = false;
 		PlayState.storyDifficulty = replay.difficulty;
 
 		PlayState.storyWeek = replay.week;
 		return new ReplayPlayer(replay);
-  }
+	}
 
 	override public function update(elapsed:Float)
 	{
 		var replay:Replay = currReplay;
-    replayText.text = "REPLAY | " + Conductor.songPosition/1000 + "/" + (replay.frames.length*16)/1000;
+		tick(elapsed);
+		if (!playbackPaused || FlxG.keys.justPressed.F)
+		{
+			super.update(elapsed);
+			frameCounter++;
+		}
+		if (frameCounter > replay.frames.length)
+		{
+			endSong();
+		}
+
+		if (FlxG.keys.justPressed.S)
+		{
+      if (frameCounter < replay.frames.length - 60) {
+        for (i in 0...((replay.frames.length - 60) - frameCounter))
+        {
+          tick(elapsed);
+          super.update(elapsed);
+          frameCounter++;
+        }
+      }
+		}
+
+		if (playbackPaused)
+		{
+			replayText.text = "REPLAY | PAUSED | Frame " + frameCounter + "/" + replay.frames.length;
+			replayText.alpha = 1;
+			if (FlxG.keys.justPressed.G)
+			{
+				frameCounter--;
+				// for (note in notes) {
+				//   note.kill();
+				//   note.destroy();
+				// }
+				// generateSong(PlayState.SONG.song);
+				// for (note in notes) {
+				//   if (note.strumTime < Conductor.songPosition) {
+				//     note.kill();
+				//     note.destroy();
+				//   }
+				// }
+			}
+		}
+		else
+		{
+			replayText.text = "REPLAY";
+			replayText.alpha = 0.5;
+		}
+	}
+
+	public function tick(elapsed:Float)
+	{
+    var replay:Replay = currReplay;
 		if (replay.frames[frameCounter] != null)
 		{
 			var daFrame:ReplayFrame = replay.frames[frameCounter];
@@ -135,7 +192,18 @@ class ReplayPlayer extends PlayState
 			controller.DOWN = daFrame.controlArray[1];
 			controller.UP = daFrame.controlArray[2];
 			controller.RIGHT = daFrame.controlArray[3];
-
+			if (!playbackPaused && FlxG.keys.justPressed.SPACE)
+			{
+				playbackPaused = true;
+				FlxG.sound.music.pause();
+				vocals.pause();
+			}
+			else if (FlxG.keys.justPressed.SPACE)
+			{
+				playbackPaused = false;
+				FlxG.sound.music.play();
+				vocals.play();
+			}
 			var prevFrame:ReplayFrame; // DO NOT USE FOR ITS SONG POS, WILL LIKELY BE INCORRECT
 			if (replay.frames[frameCounter - 1] != null)
 			{
@@ -146,77 +214,77 @@ class ReplayPlayer extends PlayState
 				prevFrame = new ReplayFrame([false, false, false, false], 0);
 			}
 
-			if (controller.LEFT && !prevFrame.controlArray[0])
+			// hideous input code
+			if (true)
 			{
-				controller.LEFT_P = true;
-			}
-			else
-			{
-				controller.LEFT_P = false;
-			}
-			if (controller.DOWN && !prevFrame.controlArray[1])
-			{
-				controller.DOWN_P = true;
-			}
-			else
-			{
-				controller.DOWN_P = false;
-			}
-			if (controller.UP && !prevFrame.controlArray[2])
-			{
-				controller.UP_P = true;
-			}
-			else
-			{
-				controller.UP_P = false;
-			}
-			if (controller.RIGHT && !prevFrame.controlArray[3])
-			{
-				controller.RIGHT_P = true;
-			}
-			else
-			{
-				controller.RIGHT_P = false;
+				if (controller.LEFT && !prevFrame.controlArray[0])
+				{
+					controller.LEFT_P = true;
+				}
+				else
+				{
+					controller.LEFT_P = false;
+				}
+				if (controller.DOWN && !prevFrame.controlArray[1])
+				{
+					controller.DOWN_P = true;
+				}
+				else
+				{
+					controller.DOWN_P = false;
+				}
+				if (controller.UP && !prevFrame.controlArray[2])
+				{
+					controller.UP_P = true;
+				}
+				else
+				{
+					controller.UP_P = false;
+				}
+				if (controller.RIGHT && !prevFrame.controlArray[3])
+				{
+					controller.RIGHT_P = true;
+				}
+				else
+				{
+					controller.RIGHT_P = false;
+				}
+
+				if (!controller.LEFT && prevFrame.controlArray[0])
+				{
+					controller.LEFT_R = true;
+				}
+				else
+				{
+					controller.LEFT_R = false;
+				}
+				if (!controller.DOWN && prevFrame.controlArray[1])
+				{
+					controller.DOWN_R = true;
+				}
+				else
+				{
+					controller.DOWN_R = false;
+				}
+				if (!controller.UP && prevFrame.controlArray[2])
+				{
+					controller.UP_R = true;
+				}
+				else
+				{
+					controller.UP_R = false;
+				}
+				if (!controller.RIGHT && prevFrame.controlArray[3])
+				{
+					controller.RIGHT_R = true;
+				}
+				else
+				{
+					controller.RIGHT_R = false;
+				}
 			}
 
-			if (!controller.LEFT && prevFrame.controlArray[0])
-			{
-				controller.LEFT_R = true;
-			}
-			else
-			{
-				controller.LEFT_R = false;
-			}
-			if (!controller.DOWN && prevFrame.controlArray[1])
-			{
-				controller.DOWN_R = true;
-			}
-			else
-			{
-				controller.DOWN_R = false;
-			}
-			if (!controller.UP && prevFrame.controlArray[2])
-			{
-				controller.UP_R = true;
-			}
-			else
-			{
-				controller.UP_R = false;
-			}
-			if (!controller.RIGHT && prevFrame.controlArray[3])
-			{
-				controller.RIGHT_R = true;
-			}
-			else
-			{
-				controller.RIGHT_R = false;
-			}
 			Conductor.songPosition = daFrame.songPosition;
 		}
-		super.update(elapsed);
-		frameCounter++;
-    if (frameCounter > replay.frames.length) {
-      endSong();
-    }
 	}
 }

@@ -1,5 +1,6 @@
 package;
 
+import openfl.Lib;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -134,6 +135,16 @@ class MainMenuState extends MusicBeatState
 			if (controls.BACK)
 			{
 				FlxG.switchState(new TitleState());
+			}
+
+			if (controls.RESET) {
+				var poop:String = Highscore.formatSong("south", 2);
+				PlayState.SONG = Song.loadFromJson(poop, "south");
+				PlayState.isStoryMode = false;
+				PlayState.storyDifficulty = 2;
+
+				PlayState.storyWeek = 2;
+				LoadingState.loadAndSwitchState(new PlayState());
 			}
 
 			if (controls.ACCEPT)

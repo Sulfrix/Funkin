@@ -87,8 +87,10 @@ class ModifierSubState extends MusicBeatSubstate
 
 		if (controls.CHEAT)
 		{
-			if (Replay.lastReplay != null)
+			if (Replay.lastReplay != null) {
+        var debug = Replay.lastReplay;
 				ReplayPlayer.playback(Replay.lastReplay);
+      }
 		}
 
 		if (controls.BACK)
