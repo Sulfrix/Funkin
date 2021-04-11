@@ -1,5 +1,5 @@
 package;
 
 class Mobile {
-  static var EdgePadding:Int = 25;
+  public static var edgePadding:Int = 50;
 }

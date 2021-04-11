@@ -13,6 +13,8 @@ class GameOverState extends FlxTransitionableState
 	var bfX:Float = 0;
 	var bfY:Float = 0;
 
+	
+
 	public function new(x:Float, y:Float)
 	{
 		super();
@@ -48,6 +50,8 @@ class GameOverState extends FlxTransitionableState
 
 		// FlxTween.tween(restart, {alpha: 1}, 1, {ease: FlxEase.quartInOut});
 		// FlxTween.tween(restart, {y: restart.y + 40}, 7, {ease: FlxEase.quartInOut, type: PINGPONG});
+
+		
 
 		super.create();
 	}

@@ -14,20 +14,21 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-//import io.newgrounds.NG;
+// import io.newgrounds.NG;
 import lime.app.Application;
 
 using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-
 	#if !switch
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
 	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay'];
 	#end
 
+	var storyModeButton:Button;
+	var testButton:Button;
 
 	override function create()
 	{
@@ -70,6 +71,12 @@ class MainMenuState extends MusicBeatState
 		logoBl.y -= FlxG.height / 5;
 		add(logoBl);
 
+		storyModeButton = new Button(Mobile.edgePadding, FlxG.height - 400, FlxG.width - (Mobile.edgePadding * 2), 100, "Story Mode", 0xFF5100ff, UI);
+		add(storyModeButton);
+
+		testButton = new Button(Mobile.edgePadding, Mobile.edgePadding, 100, 100, "Test", 0xFF5100ff, UI);
+		add(testButton);
+
 		var versionShit:FlxText = new FlxText(25, FlxG.height - 18, 0, "v" + Application.current.meta.get('version'), 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -79,11 +86,17 @@ class MainMenuState extends MusicBeatState
 
 		super.create();
 	}
+
 	override function update(elapsed:Float)
 	{
-
 		super.update(elapsed);
-
+		if (storyModeButton.click) {
+			storyModeButton.confirmed = true;
+			FlxG.sound.play(Paths.sound('confirmMenu'));
+			FlxG.switchState(new StoryMenuState());
+		}
+		if (testButton.click) {
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+		}
 	}
-
 }

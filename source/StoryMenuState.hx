@@ -71,6 +71,9 @@ class StoryMenuState extends MusicBeatState
 	var leftArrow:FlxSprite;
 	var rightArrow:FlxSprite;
 
+	var backButton:Button;
+	var playButton:Button;
+
 	override function create()
 	{
 		transIn = FlxTransitionableState.defaultTransIn;
@@ -96,6 +99,14 @@ class StoryMenuState extends MusicBeatState
 		rankText.setFormat(Paths.font("vcr.ttf"), 32);
 		rankText.size = scoreText.size;
 		rankText.screenCenter(X);
+
+
+		backButton = new Button(Mobile.edgePadding, FlxG.height - (50 + Mobile.edgePadding), 150, 50, "Back", 0xFFd43b3b, UI);
+		add(backButton);
+
+		var playwidth = 240;
+		playButton = new Button((FlxG.width/2) - playwidth/2, FlxG.height - (75 + Mobile.edgePadding), playwidth, 75, "PLAY", 0xFF3bd454, UI);
+		add(playButton);
 
 		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
 		var yellowBG:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFF9CF51);
@@ -241,6 +252,18 @@ class StoryMenuState extends MusicBeatState
 			lock.y = grpWeekText.members[lock.ID].y;
 		});
 
+		for (item in grpWeekText) {
+			#if mobile
+				for (touch in FlxG.touches.justStarted()) {
+					if (touch.overlaps(item)) {
+						if (curWeek != item.weekNum) {
+							changeWeek(item.weekNum - curWeek);
+						}
+					}
+				}
+			#end
+		}
+
 		if (!movedBack)
 		{
 			if (!selectedWeek)
@@ -271,15 +294,18 @@ class StoryMenuState extends MusicBeatState
 					changeDifficulty(-1);
 			}
 
-			if (controls.ACCEPT)
+			if (playButton.click)
 			{
+				playButton.confirmed = true;
+				backButton.hide = true;
 				selectWeek();
 			}
 		}
 
-		if (controls.BACK && !movedBack && !selectedWeek)
+		if (backButton.click)
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
+			backButton.confirmed = true;
 			movedBack = true;
 			FlxG.switchState(new MainMenuState());
 		}

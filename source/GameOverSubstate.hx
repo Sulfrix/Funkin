@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSubState;
@@ -12,7 +13,14 @@ class GameOverSubstate extends MusicBeatSubstate
 	var bf:Boyfriend;
 	var camFollow:FlxObject;
 
+	var UICam:FlxCamera;
+
+	var mainCam:FlxCamera;
+
 	var stageSuffix:String = "";
+	
+	var exitButton:Button;
+	var retryButton:Button;
 
 	public function new(x:Float, y:Float)
 	{
@@ -37,6 +45,19 @@ class GameOverSubstate extends MusicBeatSubstate
 		bf = new Boyfriend(x, y, daBf);
 		add(bf);
 
+		//0xFF3bd454
+		var exitWidth = 200;
+		exitButton = new Button(FlxG.width - (exitWidth + Mobile.edgePadding), FlxG.height - (Mobile.edgePadding + 75), exitWidth, 75, "EXIT", 0xFFd43b3b, UI);
+		exitButton.scrollFactor.set();
+		add(exitButton);
+
+		var retryWidth = 200;
+		retryButton = new Button(Mobile.edgePadding, FlxG.height - (Mobile.edgePadding + 75), retryWidth, 75, "RETRY", 0xFF3bd454, UI);
+		retryButton.scrollFactor.set();
+		add(retryButton);
+
+
+
 		camFollow = new FlxObject(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y, 1, 1);
 		add(camFollow);
 
@@ -55,12 +76,14 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		if (controls.ACCEPT)
+		if (retryButton.click)
 		{
+			retryButton.confirmed = true;
+			exitButton.hide = true;
 			endBullshit();
 		}
 
-		if (controls.BACK)
+		if (exitButton.click)
 		{
 			FlxG.sound.music.stop();
 

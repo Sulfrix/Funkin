@@ -140,7 +140,7 @@ class PlayState extends MusicBeatState
 			FlxG.sound.music.stop();
 
 		// var gameCam:FlxCamera = FlxG.camera;
-		camGame = new FlxCamera();
+		camGame = new FlxCamera(0, 0, 1280, 720);
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 
