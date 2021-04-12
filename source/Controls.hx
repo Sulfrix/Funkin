@@ -86,6 +86,7 @@ enum KeyboardScheme
 	Duo(first:Bool);
 	None;
 	Custom;
+	Centered;
 }
 
 /**
@@ -526,6 +527,15 @@ class Controls extends FlxActionSet
 				inline bindKeys(Control.RESET, [BACKSPACE]);
 			case None: // nothing
 			case Custom: // nothing
+			case Centered:
+				inline bindKeys(Control.UP, [J, FlxKey.UP]);
+				inline bindKeys(Control.DOWN, [F, FlxKey.DOWN]);
+				inline bindKeys(Control.LEFT, [D, FlxKey.LEFT]);
+				inline bindKeys(Control.RIGHT, [K, FlxKey.RIGHT]);
+				inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
+				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
+				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
+				inline bindKeys(Control.RESET, [R]);
 		}
 		#else
 		switch (scheme)

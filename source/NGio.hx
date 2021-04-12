@@ -184,8 +184,11 @@ class NGio
 
 	inline static public function logEvent(event:String)
 	{
+		#if !debug
 		NG.core.calls.event.logEvent(event).send();
 		trace('should have logged: ' + event);
+		#end
+		trace('Penis Trace.');
 	}
 
 	inline static public function unlockMedal(id:Int)
